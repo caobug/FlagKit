@@ -40,21 +40,24 @@ public class Flag: NSObject {
      - parameter style: Desired flag style
      */
     @objc public func image(style: FlagStyle) -> UIImage {
-        return originalImage.rendereredImage(size: style.size, action: { (context) in
-            switch style {
-            case .none:
-                break
-            case .roundedRect:
-                let path = UIBezierPath(roundedRect: context.format.bounds, cornerRadius: 2)
-                path.addClip()
-            case .square:
-                let path = UIBezierPath(rect: context.format.bounds)
-                path.addClip()
-            case .circle:
-                let path = UIBezierPath(roundedRect: context.format.bounds, cornerRadius: style.size.width)
-                path.addClip()
-            }
-        })
+        if #available(iOS 10.0, *) {
+            return originalImage.rendereredImage(size: style.size, action: { (context) in
+                switch style {
+                case .none:
+                    break
+                case .roundedRect:
+                    let path = UIBezierPath(roundedRect: context.format.bounds, cornerRadius: 2)
+                    path.addClip()
+                case .square:
+                    let path = UIBezierPath(rect: context.format.bounds)
+                    path.addClip()
+                case .circle:
+                    let path = UIBezierPath(roundedRect: context.format.bounds, cornerRadius: style.size.width)
+                    path.addClip()
+                }
+            })
+        }
+        return originalImage
     }
 #elseif os(macOS)
     /**
